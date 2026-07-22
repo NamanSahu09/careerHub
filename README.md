@@ -1,4 +1,4 @@
-# CareerHub Portal — Root Guide
+# CareerHub Portal  Root Guide
 
 This is a MERN-stack application containing two separate directories:
 1. **`careerhub-backend`**: Node.js + Express API server (runs on port `5001` and connects to MongoDB Atlas).
@@ -6,7 +6,7 @@ This is a MERN-stack application containing two separate directories:
 
 ---
 
-## ⚠️ Important note on command execution
+## Important note on command execution
 The root directory `projectLPU` is just a container folder and **does not contain a `package.json` file**. 
 Running `npm run dev` or `npm install` directly in this root directory will result in an `npm error ENOENT`. 
 
@@ -14,7 +14,7 @@ You must always navigate (`cd`) into either the `careerhub` or `careerhub-backen
 
 ---
 
-## 🚀 How to Run the Project (Quick Start)
+## How to Run the Project (Quick Start)
 
 ### 1. Start the Backend API Server
 Open a terminal window and run:
@@ -56,7 +56,7 @@ npm run seed:admin
 
 ---
 
-## 🔑 Login Credentials
+## Login Credentials
 
 ### System Administrator:
 - **URL**: [http://localhost:5173/admin/login](http://localhost:5173/admin/login)
