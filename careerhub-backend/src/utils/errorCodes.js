@@ -1,0 +1,24 @@
+/**
+ * Stable machine-readable error codes returned in every error response as
+ * `code`, alongside the human-readable `message`. The frontend should
+ * switch on `code`, not on `message` text, since messages may be reworded.
+ */
+const ERROR_CODES = {
+  VALIDATION_ERROR: "VALIDATION_ERROR",
+  EMAIL_ALREADY_EXISTS: "EMAIL_ALREADY_EXISTS",
+  PHONE_ALREADY_EXISTS: "PHONE_ALREADY_EXISTS",
+  INVALID_CREDENTIALS: "INVALID_CREDENTIALS",
+  ACCOUNT_DISABLED: "ACCOUNT_DISABLED",
+  USER_NOT_FOUND: "USER_NOT_FOUND",
+  JOB_NOT_FOUND: "JOB_NOT_FOUND",
+  NOT_AUTHENTICATED: "NOT_AUTHENTICATED",
+  TOKEN_EXPIRED: "TOKEN_EXPIRED",
+  TOKEN_INVALID: "TOKEN_INVALID",
+  FORBIDDEN_ROLE: "FORBIDDEN_ROLE",
+  FORBIDDEN_OWNER: "FORBIDDEN_OWNER",
+  ROUTE_NOT_FOUND: "ROUTE_NOT_FOUND",
+  RATE_LIMITED: "RATE_LIMITED",
+  INTERNAL_ERROR: "INTERNAL_ERROR",
+};
+
+module.exports = ERROR_CODES;
