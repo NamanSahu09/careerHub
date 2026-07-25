@@ -30,20 +30,50 @@ export default function HomePage() {
   const [jobs, setJobs] = useState(mockJobs);
   const [offline, setOffline] = useState(false);
 
-  // Try the real API first; if it's unreachable (e.g. backend not running
-  // yet), fall back to local sample data so the UI is never empty.
   useEffect(() => {
     let cancelled = false;
-    jobsApi
-      .list()
-      .then((data) => {
-        if (!cancelled && data.jobs?.length) {
-          setJobs(data.jobs.map((j) => ({ ...j, id: j._id, posted: relativeTime(j.createdAt), applicants: j.applicantCount ?? 0 })));
-        }
-      })
-      .catch(() => {
-        if (!cancelled) setOffline(true);
-      });
+    
+    Promise.allSettled([
+      jobsApi.list(),
+      jobsApi.listLinkedIn()
+    ]).then(([directRes, linkedinRes]) => {
+      if (cancelled) return;
+
+      let mergedList = [];
+
+      // Process direct platform jobs
+      if (directRes.status === "fulfilled" && directRes.value.jobs?.length) {
+        const directJobs = directRes.value.jobs.map((j) => ({
+          ...j,
+          id: j._id,
+          posted: relativeTime(j.createdAt),
+          applicants: j.applicantCount ?? 0,
+          isExternal: false
+        }));
+        mergedList = [...mergedList, ...directJobs];
+      }
+
+      // Process live LinkedIn scraped jobs from Apify run
+      if (linkedinRes.status === "fulfilled" && linkedinRes.value.jobs?.length) {
+        const linkedinJobs = linkedinRes.value.jobs.map((j) => ({
+          ...j,
+          id: j._id,
+          posted: j.postedTime || "Recently",
+          applicants: j.applicants || 0,
+          isExternal: true
+        }));
+        mergedList = [...mergedList, ...linkedinJobs];
+      }
+
+      if (mergedList.length > 0) {
+        setJobs(mergedList);
+      } else {
+        setOffline(true);
+      }
+    }).catch(() => {
+      if (!cancelled) setOffline(true);
+    });
+
     return () => {
       cancelled = true;
     };

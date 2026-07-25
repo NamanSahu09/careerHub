@@ -41,35 +41,54 @@ export default function JobDetailModal({ job, onClose, onSave, saved }) {
         </button>
 
         <div className="flex items-start gap-4 pr-8">
-          <div
-            className="w-14 h-14 rounded-xl flex items-center justify-center text-white font-display font-bold text-xl shrink-0"
-            style={{ backgroundColor: color }}
-            aria-hidden="true"
-          >
-            {logo}
-          </div>
+          {job.companyLogo ? (
+            <img
+              src={job.companyLogo}
+              alt={job.company}
+              className="w-14 h-14 rounded-xl border border-border bg-white object-contain shrink-0"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = "https://via.placeholder.com/56?text=" + (job.company?.charAt(0) || "J");
+              }}
+            />
+          ) : (
+            <div
+              className="w-14 h-14 rounded-xl flex items-center justify-center text-white font-display font-bold text-xl shrink-0"
+              style={{ backgroundColor: color }}
+              aria-hidden="true"
+            >
+              {logo}
+            </div>
+          )}
           <div>
             <h2 id="job-modal-title" className="font-display font-bold text-xl text-navy leading-snug">
               {job.title}
             </h2>
-            <p className="text-text-muted text-sm mt-0.5">{job.company}</p>
+            <p className="text-text-muted text-sm mt-0.5">
+              {job.company}
+              {job.isExternal && (
+                <span className="ml-1.5 inline-flex items-center text-[10px] font-semibold bg-[#E8F0FE] text-[#1A73E8] border border-[#D2E3FC] px-1.5 py-0.5 rounded">
+                  LinkedIn External
+                </span>
+              )}
+            </p>
           </div>
         </div>
 
         <div className="mt-6 grid grid-cols-2 gap-4 text-sm">
           <div className="flex items-center gap-2 text-text-muted"><MapPin size={15} /> {job.location} · {job.mode}</div>
           <div className="flex items-center gap-2 text-text-muted"><Briefcase size={15} /> {job.experience}</div>
-          <div className="flex items-center gap-2 text-text-muted"><Wallet size={15} /> {job.salary}</div>
-          <div className="flex items-center gap-2 text-text-muted"><Users size={15} /> {job.applicants} applicants</div>
+          <div className="flex items-center gap-2 text-text-muted"><Wallet size={15} /> {job.salaryMin ? `$${job.salaryMin.toLocaleString()} - $${job.salaryMax.toLocaleString()}` : (job.salary || "N/A")}</div>
+          <div className="flex items-center gap-2 text-text-muted"><Users size={15} /> {job.applicants || (job.applicationsCount || "0")}</div>
         </div>
 
         <div className="mt-6">
           <h3 className="font-semibold text-navy text-sm mb-2">About the role</h3>
-          <p className="text-sm text-text-muted leading-relaxed">{job.description}</p>
+          <p className="text-sm text-text-muted leading-relaxed whitespace-pre-line">{job.description}</p>
         </div>
 
         <div className="mt-6">
-          <h3 className="font-semibold text-navy text-sm mb-2">Skills</h3>
+          <h3 className="font-semibold text-navy text-sm mb-2">Skills / Sector</h3>
           <div className="flex flex-wrap gap-1.5">
             {job.skills.map((s) => (
               <span key={s} className="text-xs font-medium bg-bg text-text-muted border border-border rounded-md px-2.5 py-1">
@@ -80,9 +99,20 @@ export default function JobDetailModal({ job, onClose, onSave, saved }) {
         </div>
 
         <div className="mt-8 flex gap-3">
-          <button className="flex-1 bg-gold text-navy font-semibold text-sm rounded-xl py-3 hover:brightness-105 active:scale-[0.98] transition">
-            Apply now
-          </button>
+          {job.isExternal ? (
+            <a
+              href={job.applyUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 bg-[#1A73E8] text-white font-semibold text-sm rounded-xl py-3 hover:bg-[#1557b0] active:scale-[0.98] transition text-center"
+            >
+              Apply on LinkedIn
+            </a>
+          ) : (
+            <button className="flex-1 bg-gold text-navy font-semibold text-sm rounded-xl py-3 hover:brightness-105 active:scale-[0.98] transition">
+              Apply now
+            </button>
+          )}
           <button
             onClick={() => onSave(job.id)}
             className={`flex-1 font-semibold text-sm rounded-xl py-3 border transition-colors ${

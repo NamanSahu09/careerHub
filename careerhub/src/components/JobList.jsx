@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { SlidersHorizontal, Inbox } from "lucide-react";
+import { SlidersHorizontal, Inbox, Globe, Award, Sparkles } from "lucide-react";
 import JobCard from "./JobCard";
 
 const MODES = ["Remote", "Hybrid", "On-site"];
@@ -9,9 +9,14 @@ export default function JobList({ jobs, filters, savedIds, onOpen, onSave }) {
   const [mode, setMode] = useState(null);
   const [experience, setExperience] = useState(null);
   const [sort, setSort] = useState("relevance");
+  const [source, setSource] = useState("all"); // 'all', 'direct', 'linkedin'
 
   const filtered = useMemo(() => {
     let list = jobs.filter((j) => {
+      // Source filter
+      if (source === "direct" && j.isExternal) return false;
+      if (source === "linkedin" && !j.isExternal) return false;
+
       const q = filters.query?.trim().toLowerCase();
       const loc = filters.location?.trim().toLowerCase();
       const matchesQuery =
@@ -28,7 +33,7 @@ export default function JobList({ jobs, filters, savedIds, onOpen, onSave }) {
     if (sort === "applicants") list = [...list].sort((a, b) => a.applicants - b.applicants);
     if (sort === "urgent") list = [...list].sort((a, b) => Number(b.urgent) - Number(a.urgent));
     return list;
-  }, [jobs, filters, mode, experience, sort]);
+  }, [jobs, filters, mode, experience, sort, source]);
 
   const Chip = ({ active, children, onClick }) => (
     <button
@@ -45,6 +50,39 @@ export default function JobList({ jobs, filters, savedIds, onOpen, onSave }) {
 
   return (
     <section id="jobs" className="max-w-7xl mx-auto px-5 sm:px-8 py-16">
+      {/* Premium Source Toggle Tabs */}
+      <div className="flex border-b border-border mb-8 gap-6">
+        <button
+          onClick={() => setSource("all")}
+          className={`pb-4 text-sm font-semibold flex items-center gap-1.5 border-b-2 transition-colors ${
+            source === "all"
+              ? "border-gold text-navy"
+              : "border-transparent text-text-muted hover:text-navy"
+          }`}
+        >
+          <Sparkles size={16} /> All Openings
+        </button>
+        <button
+          onClick={() => setSource("direct")}
+          className={`pb-4 text-sm font-semibold flex items-center gap-1.5 border-b-2 transition-colors ${
+            source === "direct"
+              ? "border-gold text-navy"
+              : "border-transparent text-text-muted hover:text-navy"
+          }`}
+        >
+          <Award size={16} /> Platform Direct
+        </button>
+        <button
+          onClick={() => setSource("linkedin")}
+          className={`pb-4 text-sm font-semibold flex items-center gap-1.5 border-b-2 transition-colors ${
+            source === "linkedin"
+              ? "border-gold text-navy"
+              : "border-transparent text-text-muted hover:text-navy"
+          }`}
+        >
+          <Globe size={16} /> Live LinkedIn Scraped
+        </button>
+      </div>
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
         <div>
           <h2 className="font-display font-bold text-2xl sm:text-3xl text-navy">

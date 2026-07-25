@@ -3,6 +3,8 @@ const authRoutes = require("./authRoutes");
 const jobRoutes = require("./jobRoutes");
 const adminRoutes = require("./adminRoutes");
 const chatRoutes = require("./chatRoutes");
+const resumeRoutes = require("./resumeRoutes");
+const interviewRoutes = require("./interviewRoutes");
 
 const router = express.Router();
 
@@ -12,5 +14,8 @@ router.use("/auth", authRoutes);
 router.use("/jobs", jobRoutes);
 router.use("/admin", adminRoutes);
 router.use("/chat", chatRoutes);
+router.use("/resume", resumeRoutes);
+router.use("/interview", interviewRoutes);
 
 module.exports = router;
+

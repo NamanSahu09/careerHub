@@ -6,15 +6,30 @@ export default function Footer() {
   const columns = [
     {
       title: "For job seekers",
-      links: ["Browse jobs", "Career advice", "Resume builder", "Salary guide"],
+      links: [
+        { name: "Browse jobs", path: "/#jobs" },
+        { name: "Career advice", path: "/#jobs" },
+        { name: "Resume builder", path: ROUTES.RESUME_BUILDER },
+        { name: "Salary guide", path: ROUTES.SALARY_GUIDE },
+      ],
     },
     {
       title: "For employers",
-      links: ["Post a job", "Search resumes", "Pricing", "Employer branding"],
+      links: [
+        { name: "Post a job", path: ROUTES.POST_JOB },
+        { name: "Search resumes", path: ROUTES.EMPLOYER_SEARCH_RESUMES },
+        { name: "Pricing", path: ROUTES.PRICING },
+        { name: "Employer branding", path: "/#jobs" },
+      ],
     },
     {
       title: "Company",
-      links: ["About us", "Newsroom", "We're hiring", "Contact"],
+      links: [
+        { name: "About us", path: "/#jobs" },
+        { name: "Newsroom", path: ROUTES.NEWSROOM },
+        { name: "We're hiring", path: "/#jobs" },
+        { name: "Contact", path: "/#jobs" },
+      ],
     },
   ];
 
@@ -28,12 +43,12 @@ export default function Footer() {
             </h2>
             <p className="text-navy/70 text-sm mt-1">Create a profile once, get matched everywhere.</p>
           </div>
-          <a
-            href="#top"
+          <Link
+            to={ROUTES.CANDIDATE_REGISTER}
             className="shrink-0 bg-navy text-white font-semibold text-sm rounded-xl px-6 py-3.5 hover:bg-navy-soft transition-colors"
           >
             Create free profile
-          </a>
+          </Link>
         </div>
       </section>
 
@@ -68,14 +83,19 @@ export default function Footer() {
               <h3 className="text-white font-semibold text-sm mb-4">{col.title}</h3>
               <ul className="space-y-2.5 text-sm">
                 {col.links.map((l) => (
-                  <li key={l}>
-                    <a href="#top" className="hover:text-white transition-colors">{l}</a>
+                  <li key={l.name}>
+                    {l.path.startsWith("/") && !l.path.includes("#") ? (
+                      <Link to={l.path} className="hover:text-white transition-colors">{l.name}</Link>
+                    ) : (
+                      <a href={l.path} className="hover:text-white transition-colors">{l.name}</a>
+                    )}
                   </li>
                 ))}
               </ul>
             </div>
           ))}
         </div>
+
         <div className="border-t border-white/10">
           <div className="max-w-7xl mx-auto px-5 sm:px-8 py-5 flex flex-col sm:flex-row justify-between gap-2 text-xs">
             <p>© {new Date().getFullYear()} CareerHub India. All rights reserved.</p>

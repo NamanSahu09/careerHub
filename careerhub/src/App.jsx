@@ -11,11 +11,20 @@ import EmployerLoginPage from "./pages/auth/EmployerLoginPage.jsx";
 import EmployerRegisterPage from "./pages/auth/EmployerRegisterPage.jsx";
 
 import PostJobPage from "./pages/employer/PostJobPage.jsx";
+import SearchResumesPage from "./pages/employer/SearchResumesPage.jsx";
+
+import CandidateDashboardPage from "./pages/candidate/CandidateDashboardPage.jsx";
+import ResumeBuilderPage from "./pages/candidate/ResumeBuilderPage.jsx";
+import SalaryGuidePage from "./pages/candidate/SalaryGuidePage.jsx";
+import MockInterviewPage from "./pages/candidate/MockInterviewPage.jsx";
 
 import AdminLoginPage from "./pages/admin/AdminLoginPage.jsx";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage.jsx";
 import AdminJobsPage from "./pages/admin/AdminJobsPage.jsx";
 import AdminCandidatesPage from "./pages/admin/AdminCandidatesPage.jsx";
+
+import PricingPage from "./pages/employer/PricingPage.jsx";
+import NewsroomPage from "./pages/NewsroomPage.jsx";
 
 import ChatWidget from "./components/ChatWidget.jsx";
 
@@ -36,6 +45,31 @@ export default function App() {
         <Route path={ROUTES.EMPLOYER_REGISTER} element={<EmployerRegisterPage />} />
 
         <Route
+          path={ROUTES.CANDIDATE_DASHBOARD}
+          element={
+            <ProtectedRoute role="candidate" redirectTo={ROUTES.CANDIDATE_LOGIN}>
+              <CandidateDashboardPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={ROUTES.RESUME_BUILDER}
+          element={
+            <ProtectedRoute role="candidate" redirectTo={ROUTES.CANDIDATE_LOGIN}>
+              <ResumeBuilderPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={ROUTES.MOCK_INTERVIEW}
+          element={
+            <ProtectedRoute role="candidate" redirectTo={ROUTES.CANDIDATE_LOGIN}>
+              <MockInterviewPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
           path={ROUTES.POST_JOB}
           element={
             <ProtectedRoute role="employer" redirectTo={ROUTES.EMPLOYER_LOGIN}>
@@ -43,6 +77,19 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path={ROUTES.EMPLOYER_SEARCH_RESUMES}
+          element={
+            <ProtectedRoute role="employer" redirectTo={ROUTES.EMPLOYER_LOGIN}>
+              <SearchResumesPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Public static content pages */}
+        <Route path={ROUTES.PRICING} element={<PricingPage />} />
+        <Route path={ROUTES.SALARY_GUIDE} element={<SalaryGuidePage />} />
+        <Route path={ROUTES.NEWSROOM} element={<NewsroomPage />} />
 
         <Route path={ROUTES.ADMIN_LOGIN} element={<AdminLoginPage />} />
         <Route
@@ -78,3 +125,4 @@ export default function App() {
     </>
   );
 }
+

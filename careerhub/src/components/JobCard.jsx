@@ -7,20 +7,39 @@ export default function JobCard({ job, onOpen, onSave, saved }) {
     <article className="bg-surface border border-border rounded-xl p-5 hover:shadow-card-hover hover:-translate-y-0.5 transition-all animate-fadeUp">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-start gap-3 min-w-0">
-          <div
-            className="w-11 h-11 rounded-lg flex items-center justify-center text-white font-display font-bold shrink-0"
-            style={{ backgroundColor: color }}
-            aria-hidden="true"
-          >
-            {logo}
-          </div>
+          {job.companyLogo ? (
+            <img
+              src={job.companyLogo}
+              alt={job.company}
+              className="w-11 h-11 rounded-lg border border-border bg-white object-contain shrink-0"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = "https://via.placeholder.com/44?text=" + (job.company?.charAt(0) || "J");
+              }}
+            />
+          ) : (
+            <div
+              className="w-11 h-11 rounded-lg flex items-center justify-center text-white font-display font-bold shrink-0"
+              style={{ backgroundColor: color }}
+              aria-hidden="true"
+            >
+              {logo}
+            </div>
+          )}
           <div className="min-w-0">
             <h3 className="font-semibold text-navy text-[15px] leading-snug truncate">
               <button onClick={() => onOpen(job)} className="hover:underline text-left">
                 {job.title}
               </button>
             </h3>
-            <p className="text-sm text-text-muted truncate">{job.company}</p>
+            <p className="text-sm text-text-muted truncate">
+              {job.company}
+              {job.isExternal && (
+                <span className="ml-1.5 inline-flex items-center text-[10px] font-semibold bg-[#E8F0FE] text-[#1A73E8] border border-[#D2E3FC] px-1.5 py-0.5 rounded">
+                  LinkedIn
+                </span>
+              )}
+            </p>
           </div>
         </div>
         {job.urgent && (

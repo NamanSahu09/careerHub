@@ -16,9 +16,55 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const links = ["Find Jobs", "Companies", "Salary Guide", "Career Advice"];
+  const getLinks = () => {
+    const base = [
+      { name: "Find Jobs", path: "/#jobs" },
+      { name: "Companies", path: "/#jobs" },
+    ];
+    if (user?.role === "candidate") {
+      return [
+        ...base,
+        { name: "Build Resume", path: ROUTES.RESUME_BUILDER },
+        { name: "Mock Interview", path: ROUTES.MOCK_INTERVIEW },
+        { name: "Dashboard", path: ROUTES.CANDIDATE_DASHBOARD },
+      ];
+    }
+    if (user?.role === "employer") {
+      return [
+        ...base,
+        { name: "Search Resumes", path: ROUTES.EMPLOYER_SEARCH_RESUMES },
+        { name: "Post a Job", path: ROUTES.POST_JOB },
+      ];
+    }
+    return [
+      ...base,
+      { name: "Salary Guide", path: ROUTES.SALARY_GUIDE },
+      { name: "Career Advice", path: "/#jobs" },
+    ];
+  };
 
+  const displayLinks = getLinks();
   const goPostJob = () => navigate(user?.role === "employer" ? ROUTES.POST_JOB : ROUTES.EMPLOYER_LOGIN);
+
+  const getNavButton = (isMobile = false) => {
+    const baseClasses = isMobile
+      ? "flex-1 text-sm font-semibold bg-gold text-navy rounded-lg py-2 text-center"
+      : "text-sm font-semibold bg-gold text-navy px-4 py-2 rounded-lg hover:brightness-105 active:scale-[0.98] transition";
+
+    if (user?.role === "candidate") {
+      return (
+        <Link to={ROUTES.CANDIDATE_DASHBOARD} className={baseClasses} onClick={() => isMobile && setOpen(false)}>
+          Dashboard
+        </Link>
+      );
+    }
+
+    return (
+      <button onClick={() => { goPostJob(); isMobile && setOpen(false); }} className={baseClasses}>
+        Post a job
+      </button>
+    );
+  };
 
   return (
     <header
@@ -27,17 +73,21 @@ export default function Navbar() {
       }`}
     >
       <nav className="max-w-7xl mx-auto flex items-center justify-between px-5 sm:px-8 h-16">
-        <a href="#top" className="flex items-center gap-2 text-white font-display font-bold text-lg tracking-tight">
+        <Link to="/" className="flex items-center gap-2 text-white font-display font-bold text-lg tracking-tight">
           <span className="w-8 h-8 rounded-lg bg-gold flex items-center justify-center text-navy">
             <Briefcase size={18} strokeWidth={2.5} />
           </span>
           CareerHub
-        </a>
+        </Link>
 
         <ul className="hidden md:flex items-center gap-8 text-sm font-medium text-white/80">
-          {links.map((l) => (
-            <li key={l}>
-              <a href="#jobs" className="hover:text-white transition-colors">{l}</a>
+          {displayLinks.map((l) => (
+            <li key={l.name}>
+              {l.path.startsWith("/") && !l.path.includes("#") ? (
+                <Link to={l.path} className="hover:text-white transition-colors">{l.name}</Link>
+              ) : (
+                <a href={l.path} className="hover:text-white transition-colors">{l.name}</a>
+              )}
             </li>
           ))}
         </ul>
@@ -61,12 +111,7 @@ export default function Navbar() {
               Log in
             </Link>
           )}
-          <button
-            onClick={goPostJob}
-            className="text-sm font-semibold bg-gold text-navy px-4 py-2 rounded-lg hover:brightness-105 active:scale-[0.98] transition"
-          >
-            Post a job
-          </button>
+          {getNavButton()}
         </div>
 
         <button
@@ -80,27 +125,32 @@ export default function Navbar() {
 
       {open && (
         <div className="md:hidden bg-navy-soft border-t border-white/10 px-5 py-4 space-y-4">
-          {links.map((l) => (
-            <a key={l} href="#jobs" className="block text-white/90 font-medium text-sm">
-              {l}
-            </a>
+          {displayLinks.map((l) => (
+            l.path.startsWith("/") && !l.path.includes("#") ? (
+              <Link key={l.name} to={l.path} className="block text-white/90 font-medium text-sm" onClick={() => setOpen(false)}>
+                {l.name}
+              </Link>
+            ) : (
+              <a key={l.name} href={l.path} className="block text-white/90 font-medium text-sm" onClick={() => setOpen(false)}>
+                {l.name}
+              </a>
+            )
           ))}
           <div className="flex gap-3 pt-2">
             {user ? (
-              <button onClick={logout} className="flex-1 text-sm font-semibold text-white border border-white/25 rounded-lg py-2">
+              <button onClick={() => { logout(); setOpen(false); }} className="flex-1 text-sm font-semibold text-white border border-white/25 rounded-lg py-2">
                 Log out
               </button>
             ) : (
-              <Link to={ROUTES.CANDIDATE_LOGIN} className="flex-1 text-sm font-semibold text-white border border-white/25 rounded-lg py-2 text-center">
+              <Link to={ROUTES.CANDIDATE_LOGIN} className="flex-1 text-sm font-semibold text-white border border-white/25 rounded-lg py-2 text-center" onClick={() => setOpen(false)}>
                 Log in
               </Link>
             )}
-            <button onClick={goPostJob} className="flex-1 text-sm font-semibold bg-gold text-navy rounded-lg py-2">
-              Post a job
-            </button>
+            {getNavButton(true)}
           </div>
         </div>
       )}
     </header>
   );
 }
+

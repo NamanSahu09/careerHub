@@ -60,6 +60,7 @@ async function streamChat(message, history, onChunk, onDone, onError) {
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
   let buffer = "";
+  let currentEvent = "";
 
   while (true) {
     const { done, value } = await reader.read();
@@ -69,15 +70,22 @@ async function streamChat(message, history, onChunk, onDone, onError) {
     buffer = lines.pop();
 
     for (const line of lines) {
-      if (line.startsWith("data: ")) {
+      const trimmedLine = line.trim();
+      if (trimmedLine.startsWith("event: ")) {
+        currentEvent = trimmedLine.slice(7).trim();
+      } else if (trimmedLine.startsWith("data: ")) {
         try {
-          const json = JSON.parse(line.slice(6));
+          const json = JSON.parse(trimmedLine.slice(6));
+          if (currentEvent === "error") {
+            onError(json.message || "Something went wrong.");
+            return;
+          }
           if (json.text) onChunk(json.text);
-          if (json.message === "Stream complete") onDone();
+          if (json.message === "Stream complete") {
+            onDone();
+            return;
+          }
         } catch {}
-      }
-      if (line.startsWith("event: error")) {
-        // next data line will have the error
       }
     }
   }
