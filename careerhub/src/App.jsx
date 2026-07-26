@@ -27,7 +27,7 @@ import PricingPage from "./pages/employer/PricingPage.jsx";
 import NewsroomPage from "./pages/NewsroomPage.jsx";
 
 import ChatWidget from "./components/ChatWidget.jsx";
-
+//  changes
 /**
  * App.jsx owns only route -> page wiring. Each page composes its own
  * components; shared providers (Router, Auth, Helmet) live in main.jsx.

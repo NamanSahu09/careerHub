@@ -56,11 +56,7 @@ async function chat(req, res) {
   try {
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({
-<<<<<<< HEAD
       model: "gemini-2.0-flash-lite",
-=======
-      model: "gemini-flash-latest",
->>>>>>> 8d914f4cfb394a2e011c29396af02894f0b1a056
       systemInstruction: SYSTEM_PROMPT,
     });
 

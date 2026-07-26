@@ -3,7 +3,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+/* css */
 :root {
   --color-bg: #F5F7FA;
   --color-surface: #FFFFFF;

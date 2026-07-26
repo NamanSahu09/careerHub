@@ -3,11 +3,6 @@ const authRoutes = require("./authRoutes");
 const jobRoutes = require("./jobRoutes");
 const adminRoutes = require("./adminRoutes");
 const chatRoutes = require("./chatRoutes");
-<<<<<<< HEAD
-=======
-const resumeRoutes = require("./resumeRoutes");
-const interviewRoutes = require("./interviewRoutes");
->>>>>>> 8d914f4cfb394a2e011c29396af02894f0b1a056
 
 const router = express.Router();
 
@@ -17,13 +12,5 @@ router.use("/auth", authRoutes);
 router.use("/jobs", jobRoutes);
 router.use("/admin", adminRoutes);
 router.use("/chat", chatRoutes);
-<<<<<<< HEAD
 
 module.exports = router;
-=======
-router.use("/resume", resumeRoutes);
-router.use("/interview", interviewRoutes);
-
-module.exports = router;
-
->>>>>>> 8d914f4cfb394a2e011c29396af02894f0b1a056
