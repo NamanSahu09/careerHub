@@ -36,11 +36,34 @@ if (process.env.NGROK_URL) allowedOrigins.push(process.env.NGROK_URL);
 app.use(
   cors({
     origin: (origin, cb) => {
+<<<<<<< HEAD
       // Allow server-to-server (no origin) or whitelisted origins
       if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
       // Also allow any *.ngrok-free.app / *.ngrok.io for convenience
       if (origin.match(/\.ngrok(-free)?\.app$/) || origin.match(/\.ngrok\.io$/))
         return cb(null, true);
+=======
+      // Allow server-to-server (no origin)
+      if (!origin) return cb(null, true);
+      
+      // Allow whitelisted origins
+      if (allowedOrigins.includes(origin)) return cb(null, true);
+      
+      // Allow any *.ngrok-free.app / *.ngrok.io / *.serveousercontent.com
+      if (
+        origin.match(/\.ngrok(-free)?\.app$/) || 
+        origin.match(/\.ngrok\.io$/) ||
+        origin.match(/\.serveousercontent\.com$/)
+      ) {
+        return cb(null, true);
+      }
+
+      // Allow localhost or 127.0.0.1 on any port (dev/proxy)
+      if (origin.startsWith("http://localhost:") || origin.startsWith("http://127.0.0.1:")) {
+        return cb(null, true);
+      }
+
+>>>>>>> 8d914f4cfb394a2e011c29396af02894f0b1a056
       cb(new Error(`CORS: origin ${origin} not allowed`));
     },
     credentials: true, // allow the httpOnly auth cookie to be sent
