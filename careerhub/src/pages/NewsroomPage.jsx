@@ -3,6 +3,7 @@ import { Newspaper, Calendar, ArrowRight, Share2, Award } from "lucide-react";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
 
+// coderoompage
 const ARTICLES = [
   {
     id: 1,

@@ -11,7 +11,8 @@ import Footer from "../components/Footer.jsx";
 import JobDetailModal from "../components/JobDetailModal.jsx";
 import { jobs as mockJobs } from "../data/mockData.js";
 import { jobsApi } from "../api/jobsApi.js";
-
+ 
+// home page
 /** Turns a createdAt timestamp into "2 days ago" style text for JobCard. */
 function relativeTime(dateStr) {
   if (!dateStr) return "Recently";
