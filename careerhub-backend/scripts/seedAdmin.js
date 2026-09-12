@@ -4,7 +4,8 @@
  * This is the *only* way an admin account is created — there is no public
  * "register as admin" endpoint, intentionally.
  */
-require("dotenv").config();
+const path = require("path");
+require("dotenv").config({ path: path.join(__dirname, "../.env") });
 const connectDB = require("../src/config/db");
 const User = require("../src/models/User");
 

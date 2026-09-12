@@ -29,6 +29,8 @@ out/
 *.sln
 *.sw?
 
-# OS files
+# OS and Archive files
 .DS_Store
 Thumbs.db
+*.zip
+

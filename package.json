@@ -1,0 +1,18 @@
+{
+  "name": "careerhub-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Root workspace wrapper for the CareerHub project (React + Express + MongoDB)",
+  "scripts": {
+    "install-backend": "npm install --prefix careerhub-backend",
+    "install-frontend": "npm install --prefix careerhub",
+    "install-all": "npm install && npm run install-backend && npm run install-frontend",
+    "dev-backend": "npm run dev --prefix careerhub-backend",
+    "dev-frontend": "npm run dev --prefix careerhub",
+    "dev": "concurrently --kill-others-on-fail \"npm run dev-backend\" \"npm run dev-frontend\"",
+    "seed": "node careerhub-backend/scripts/seedData.js"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

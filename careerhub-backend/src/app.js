@@ -42,11 +42,12 @@ app.use(
       // Allow whitelisted origins
       if (allowedOrigins.includes(origin)) return cb(null, true);
       
-      // Allow any *.ngrok-free.app / *.ngrok.io / *.serveousercontent.com
+      // Allow any *.ngrok-free.app / *.ngrok.io / *.serveousercontent.com / *.vercel.app
       if (
         origin.match(/\.ngrok(-free)?\.app$/) || 
         origin.match(/\.ngrok\.io$/) ||
-        origin.match(/\.serveousercontent\.com$/)
+        origin.match(/\.serveousercontent\.com$/) ||
+        origin.match(/\.vercel\.app$/)
       ) {
         return cb(null, true);
       }

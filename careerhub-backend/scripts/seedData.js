@@ -2,7 +2,8 @@
  * Run with: node scripts/seedData.js
  * Seeds full demo dataset (employers, candidates, and jobs) to MongoDB Atlas
  */
-require("dotenv").config();
+const path = require("path");
+require("dotenv").config({ path: path.join(__dirname, "../.env") });
 const mongoose = require("mongoose");
 const connectDB = require("../src/config/db");
 const User = require("../src/models/User");
